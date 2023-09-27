@@ -1,0 +1,19 @@
+<div class="top-border"></div>  
+<div fxLayoutAlign="center center" fxFlexFill>
+    <mat-card fxflex="40">
+        <h2>Enter Your Email</h2>
+        <form [formGroup]="emailForm">
+            <mat-form-field>
+                <input matInput type="email" placeholder="example@email.com" formControlName="email">
+                <mat-error *ngIf="emailControl.hasError('email') && !emailControl.hasError('required')">
+                    Please enter a valid email address.
+                </mat-error>
+                <mat-error *ngIf="emailControl.hasError('required')">
+                    Email is <strong>required</strong>.
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button type="submit">Enter</button>
+        </form>
+    </mat-card>
+</div>
+<router-outlet></router-outlet>

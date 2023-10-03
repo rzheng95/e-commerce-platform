@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -17,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -26,5 +26,10 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User user) {
         User savedUser = userService.addUser(user);
         return ResponseEntity.ok(savedUser);
+    }
+
+    @GetMapping("user/check-email")
+    public Boolean checkEmailExists(@RequestParam String email) {
+        return userService.checkUserByEmail(email) != null;
     }
 }

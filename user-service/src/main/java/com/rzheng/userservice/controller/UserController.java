@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    @GetMapping("/user/check-email")
+    @GetMapping("/check-email")
     public boolean doesEmailExist (@RequestParam String email) {
         return userService.doesEmailExist(email);
     }

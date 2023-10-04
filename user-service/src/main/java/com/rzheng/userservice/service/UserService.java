@@ -5,6 +5,7 @@ import com.rzheng.userservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -23,6 +24,7 @@ public class UserService {
     }
 
     public boolean doesEmailExist (String email) {
-        return userRepository.findAllByEmail(email) != null;
+       if (email.isEmpty()) return false;
+       return userRepository.findAllByEmail(email) != null;
     }
 }

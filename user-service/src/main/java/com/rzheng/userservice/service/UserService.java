@@ -5,6 +5,7 @@ import com.rzheng.userservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -20,5 +21,10 @@ public class UserService {
 
     public User addUser(User user) {
         return userRepository.save(user);
+    }
+
+    public boolean doesEmailExist (String email) {
+       if (email.isEmpty()) return false;
+       return userRepository.findAllByEmail(email) != null;
     }
 }

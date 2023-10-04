@@ -1,7 +1,8 @@
 package com.rzheng.userservice.controller;
 
-import com.rzheng.userservice.entity.User;
+import com.rzheng.userservice.model.User;
 import com.rzheng.userservice.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +20,17 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return this.userService.getAllUsers();
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User savedUser = userService.addUser(user);
-        return ResponseEntity.ok(savedUser);
+    public ResponseEntity<String> addUser(@RequestBody User user) {
+        this.userService.addUser(user);
+        return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/check-email")
-    public boolean doesEmailExist (@RequestParam String email) {
-        return userService.doesEmailExist(email);
+    public boolean doesEmailExist(@RequestParam String email) {
+        return this.userService.doesEmailExist(email);
     }
 }

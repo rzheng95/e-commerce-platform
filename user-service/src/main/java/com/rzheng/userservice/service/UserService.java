@@ -1,30 +1,45 @@
 package com.rzheng.userservice.service;
 
-import com.rzheng.userservice.entity.User;
-import com.rzheng.userservice.repository.UserRepository;
+import com.rzheng.userservice.dao.UserDao;
+import com.rzheng.userservice.exception.UserAlreadyExistsException;
+import com.rzheng.userservice.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
+@Slf4j
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
+
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return this.userDao.getUsers();
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public void addUser(User user) {
+        this.userDao.getUserByEmail(user.getEmail()).ifPresent(u -> {
+            throw new UserAlreadyExistsException("Email already exists");
+        });
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        int result = this.userDao.addUser(user);
+        if (result != 1) {
+            throw new IllegalStateException("Something went wrong, user could not be created");
+        }
     }
 
-    public boolean doesEmailExist (String email) {
-       if (email.isEmpty()) return false;
-       return userRepository.findAllByEmail(email) != null;
+    public boolean doesEmailExist(String email) {
+        if (email == null || email.isEmpty()) {
+            log.info("Email is null or empty");
+            return false;
+        }
+        return this.userDao.getUserByEmail(email).isPresent();
     }
 }

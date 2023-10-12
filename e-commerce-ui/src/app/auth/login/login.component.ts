@@ -16,10 +16,12 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      this.auth.onLogin(formData.email);
+      this.auth.onLogin(formData.email).subscribe((response) => {
+        console.log(response);
+      });
     }
   }
 }

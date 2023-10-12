@@ -1,5 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+interface LoginResponse {
+  email: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -7,14 +12,9 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  onLogin(email: string) {
-    this.http
-      .get(`http://localhost:8080/api/v1/users/check-email?email=${email}`)
-      .subscribe(
-        (data) => {
-          console.log(data);
-        },
-        (error) => {}
-      );
+  onLogin(email: string): Observable<LoginResponse> {
+    return this.http.get<LoginResponse>(
+      `http://localhost:8080/api/v1/users/check-email?email=${email}`
+    );
   }
 }

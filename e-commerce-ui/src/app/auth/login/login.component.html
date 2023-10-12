@@ -3,11 +3,11 @@
     <mat-label>Email</mat-label>
     <input matInput type="email" formControlName="email" />
     <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
-      >Email is required.</mat-error
-    >
+      >Email is required.
+    </mat-error>
     <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
-      >Invalid email format.</mat-error
-    >
+      >Invalid email format.
+    </mat-error>
   </mat-form-field>
 
   <button type="submit" mat-flat-button color="primary">Login</button>

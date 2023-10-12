@@ -1,0 +1,8 @@
+app:
+  datasource:
+    main:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      username: ${yang}
+      password: ${zjscyxj123}
+      pool-size: 30

@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "app.datasource.main.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'app.datasource.main.driver-class-name'"
+  },
+  {
+    "name": "app.datasource.main.jdbc-url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.datasource.main.jdbc-url'"
+  },
+  {
+    "name": "app.datasource.main.password",
+    "type": "java.lang.String",
+    "description": "A description for 'app.datasource.main.password'"
+  },
+  {
+    "name": "app.datasource.main.username",
+    "type": "java.lang.String",
+    "description": "A description for 'app.datasource.main.username'"
+  }
+]}

@@ -9,14 +9,18 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  showPassword: boolean = false;
 
   constructor(private fb: FormBuilder, private auth: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
-  onSubmit(): void {
+  onLogin(): void {
+    console.log(this.loginForm);
+
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.auth.onLogin(formData.email).subscribe((response) => {

@@ -17,4 +17,11 @@ export class AuthService {
       `http://localhost:8080/api/v1/users/check-email?email=${email}`
     );
   }
+
+  onSignup(email: string): void {}
+  // onSignup(email: string): Observable<LoginResponse> {
+  //   return this.http.get<LoginResponse>(
+  //     `http://localhost:8080/api/v1/users/check-email?email=${email}`
+  //   );
+  // }
 }

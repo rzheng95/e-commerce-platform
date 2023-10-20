@@ -9,9 +9,12 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent {
   signupForm: FormGroup;
-  showPassword: boolean = false;
+  showPassword = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService
+  ) {
     this.signupForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],

@@ -1,27 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-interface LoginResponse {
-  email: string;
-}
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly USER_PATH = `${environment.backendUrl}/api/v1/users`;
+
   constructor(private http: HttpClient) {}
 
-  onLogin(email: string): Observable<LoginResponse> {
-    return this.http.get<LoginResponse>(
-      `http://localhost:8080/api/v1/users/check-email?email=${email}`
-    );
+  onLogin(): Observable<string> {
+    return this.http.post<string>(`${this.USER_PATH}/login`, {});
   }
 
-  onSignup(email: string): void {}
-  // onSignup(email: string): Observable<LoginResponse> {
-  //   return this.http.get<LoginResponse>(
-  //     `http://localhost:8080/api/v1/users/check-email?email=${email}`
-  //   );
-  // }
+  onSignup(): Observable<string> {
+    return this.http.get<string>(`${this.USER_PATH}/register`);
+  }
 }

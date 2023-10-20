@@ -33,4 +33,23 @@ public class UserController {
     public boolean doesEmailExist(@RequestParam String email) {
         return this.userService.doesEmailExist(email);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        if (null != user) {
+            return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody User user) {
+        if (null != user) {
+            return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

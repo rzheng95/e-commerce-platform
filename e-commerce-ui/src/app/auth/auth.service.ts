@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoginParams } from '../util/login';
+import { LoginStatus } from '../util/login-status';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,23 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  onLogin(): Observable<string> {
-    return this.http.post<string>(`${this.USER_PATH}/login`, {});
+  onLogin(loginParams: LoginParams): Observable<LoginStatus> {
+    return this.http
+      .post<string>(`${this.USER_PATH}/login`, null, {
+        params: {
+          email: loginParams.email,
+          password: loginParams.password,
+        },
+        responseType: 'text' as 'json',
+      })
+      .pipe(
+        map(res => {
+          if (res.toLowerCase().includes('successful')) {
+            return LoginStatus.SUCCESS;
+          }
+          return LoginStatus.UNAUTHORIZED;
+        })
+      );
   }
 
   onSignup(): Observable<string> {

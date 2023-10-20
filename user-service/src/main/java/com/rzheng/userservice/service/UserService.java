@@ -3,6 +3,8 @@ package com.rzheng.userservice.service;
 import com.rzheng.userservice.dao.UserDao;
 import com.rzheng.userservice.exception.UserAlreadyExistsException;
 import com.rzheng.userservice.model.User;
+import com.rzheng.userservice.util.LoginStatus;
+import com.rzheng.userservice.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -42,4 +44,17 @@ public class UserService {
         }
         return this.userDao.getUserByEmail(email).isPresent();
     }
+
+    public LoginStatus login(String email, String password) {
+        if (!Util.isStringValid(email) || !Util.isStringValid(password)) {
+            log.info("Email or password is either null or empty");
+            return LoginStatus.UNAUTHORIZED;
+        }
+
+        return this.userDao.getUserByEmail(email)
+                .filter(user -> user.getPasswordHash().equals(password))
+                .map(user -> LoginStatus.SUCCESS)
+                .orElse(LoginStatus.UNAUTHORIZED);
+    }
+
 }

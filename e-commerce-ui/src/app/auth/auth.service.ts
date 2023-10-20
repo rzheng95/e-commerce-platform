@@ -6,7 +6,7 @@ import { LoginParams } from '../util/login';
 import { LoginStatus } from '../util/login-status';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   private readonly USER_PATH = `${environment.backendUrl}/api/v1/users`;
@@ -18,9 +18,9 @@ export class AuthService {
       .post<string>(`${this.USER_PATH}/login`, null, {
         params: {
           email: loginParams.email,
-          password: loginParams.password,
+          password: loginParams.password
         },
-        responseType: 'text' as 'json',
+        responseType: 'text' as 'json'
       })
       .pipe(
         map(res => {

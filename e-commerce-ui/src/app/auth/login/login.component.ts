@@ -8,7 +8,7 @@ import { HttpStatusCode } from '@angular/common/http';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -20,7 +20,7 @@ export class LoginComponent {
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
@@ -34,7 +34,7 @@ export class LoginComponent {
 
     const loginParams: LoginParams = {
       email,
-      password,
+      password
     };
 
     this.auth.onLogin(loginParams).subscribe({
@@ -49,7 +49,7 @@ export class LoginComponent {
         if (err.status === HttpStatusCode.Unauthorized) {
           console.log('Login failed');
         }
-      },
+      }
     });
   }
 }

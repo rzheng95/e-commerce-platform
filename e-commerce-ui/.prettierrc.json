@@ -1,12 +1,10 @@
 {
-    "tabWidth": 2,
-    "useTabs": false,
-    "singleQuote": true,
-    "semi": true,
-    "bracketSpacing": true,
-    "arrowParens": "avoid",
-    "trailingComma": "es5",
-    "bracketSameLine": true,
-    "printWidth": 80,
-    "endOfLine": "auto"
-  }
+  "trailingComma": "none",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "semi": true,
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "endOfLine": "crlf"
+}

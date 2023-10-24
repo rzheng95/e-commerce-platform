@@ -3,6 +3,7 @@ package com.rzheng.userservice.controller;
 import com.rzheng.userservice.model.User;
 import com.rzheng.userservice.service.UserService;
 import com.rzheng.userservice.util.LoginStatus;
+import com.rzheng.userservice.util.SignupStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +42,21 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> addUser(@RequestBody User user) {
-       boolean doesEmailExist = this.userService.doesEmailExist(user.getEmail());
+        SignupStatus signupStatus = this.userService.addUser(user);
 
-        this.userService.addUser(user);
+        if (signupStatus == SignupStatus.INVALID) {
+            return new ResponseEntity<>("One or more fields are invalid", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
 
-        System.out.println(user);
+        if (signupStatus == SignupStatus.CONFLICT) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.CONFLICT);
+        }
+
+        if (signupStatus == SignupStatus.INTERNAL_ERROR) {
+            return new ResponseEntity<>("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+
     }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SignupBody } from 'src/app/util/signup';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -16,19 +17,35 @@ export class SignupComponent {
     private auth: AuthService
   ) {
     this.signupForm = this.fb.group({
-      name: ['', [Validators.required]],
+      username: ['', [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]]
+      password: ['', [Validators.required]]
+      // confirmPassword: ['', [Validators.required]]
     });
   }
 
   onSignup(): void {
-    if (this.signupForm.valid) {
-      const formData = this.signupForm.value;
-      // this.auth.onSignup(formData.email).subscribe((response) => {
-      //   console.log(response);
-      // });
-    }
+    if (!this.signupForm.valid) return;
+
+    const { username, firstName, lastName, email, password } = this.signupForm.value;
+
+    const signupBody: SignupBody = {
+      username,
+      firstName,
+      lastName,
+      email,
+      passwordHash: password
+    };
+
+    this.auth.onSignup(signupBody).subscribe({
+      next: res => {
+        console.log('Signup successful: ', res);
+      },
+      error: err => {
+        console.log('Signup failed:', err.error);
+      }
+    });
   }
 }

@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginParams } from '../util/login';
 import { LoginStatus } from '../util/login-status';
+import { SignupBody } from '../util/signup';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,9 @@ export class AuthService {
       );
   }
 
-  onSignup(): Observable<string> {
-    return this.http.get<string>(`${this.USER_PATH}/register`);
+  onSignup(signupBody: SignupBody): Observable<string> {
+    return this.http.post<string>(`${this.USER_PATH}/signup`, signupBody, {
+      responseType: 'text' as 'json'
+    });
   }
 }

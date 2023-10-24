@@ -19,16 +19,12 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @GetMapping
-//    public List<User> getAllUsers() {
-//        return this.userService.getAllUsers();
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<String> addUser(@RequestBody User user) {
-//        this.userService.addUser(user);
-//        return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
-//    }
+    @GetMapping
+    public List<User> getAllUsers() {
+        return this.userService.getAllUsers();
+    }
+
+
 //    @GetMapping("/check-email")
 //    public boolean doesEmailExist(@RequestParam String email) {
 //        return this.userService.doesEmailExist(email);
@@ -43,12 +39,14 @@ public class UserController {
         return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<String> register(@RequestBody User user) {
-//        if (null != user) {
-//            return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PostMapping("/signup")
+    public ResponseEntity<String> addUser(@RequestBody User user) {
+       boolean doesEmailExist = this.userService.doesEmailExist(user.getEmail());
+
+        this.userService.addUser(user);
+
+        System.out.println(user);
+
+        return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+    }
 }

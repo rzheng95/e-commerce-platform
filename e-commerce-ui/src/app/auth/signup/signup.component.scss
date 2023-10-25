@@ -1,6 +1,6 @@
-@import "/src/theme/theme.scss";
+@import '/src/theme/theme.scss';
 
-.login-container {
+.signup-container {
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -8,7 +8,7 @@
   justify-content: center;
 }
 
-.login {
+.signup {
   text-align: center;
 
   &__content {

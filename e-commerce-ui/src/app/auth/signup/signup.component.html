@@ -1,0 +1,81 @@
+<section class="signup signup-container">
+  <div class="signup__content">
+    <h1 class="signup__title">Signup</h1>
+
+    <form class="signup__form" [formGroup]="signupForm" (ngSubmit)="onSignup()">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username" />
+        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+          Username is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput type="text" formControlName="firstName" />
+        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+          First Name is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput type="text" formControlName="lastName" />
+        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+          Last Name is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+          Email is required.
+        </mat-error>
+        <mat-error *ngIf="signupForm.get('email')?.hasError('email')">
+          Invalid email.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword ? 'password' : 'text'"
+          formControlName="password" />
+        <mat-icon matSuffix (click)="showPassword = !showPassword">
+          {{ showPassword ? 'visibility' : 'visibility_off' }}
+        </mat-icon>
+        <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Confirmed Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword ? 'password' : 'text'"
+          formControlName="confirmPassword" />
+        <mat-icon matSuffix (click)="showPassword = !showPassword">
+          {{ showPassword ? 'visibility' : 'visibility_off' }}
+        </mat-icon>
+        <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
+          Password is required=
+        </mat-error>
+      </mat-form-field> -->
+
+      <button type="submit" mat-flat-button color="primary">Signup</button>
+    </form>
+
+    <p class="signup__alternative">
+      Already have an account?
+      <a class="signup__alternative__signup" [routerLink]="['/login']">
+        Login
+      </a>
+    </p>
+  </div>
+</section>
+<router-outlet></router-outlet>
+

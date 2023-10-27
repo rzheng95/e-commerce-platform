@@ -1,18 +1,20 @@
 package com.rzheng.userservice.service;
 
 import com.rzheng.userservice.dao.UserDao;
-import com.rzheng.userservice.exception.UserAlreadyExistsException;
+import com.rzheng.userservice.model.LoginParams;
 import com.rzheng.userservice.model.User;
+import com.rzheng.userservice.model.UserParams;
 import com.rzheng.userservice.util.LoginStatus;
-import com.rzheng.userservice.util.Role;
 import com.rzheng.userservice.util.SignupStatus;
 import com.rzheng.userservice.util.Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,39 +38,61 @@ public class UserService {
         return this.userDao.getUserByEmail(email).isPresent();
     }
 
-    public LoginStatus login(String email, String password) {
-        if (!Util.isStringValid(email) || !Util.isStringValid(password)) {
+    public LoginStatus login(LoginParams loginParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (!Util.isStringValid(loginParams.getEmail()) || !Util.isStringValid(loginParams.getPassword())) {
             log.info("Email or password is either null or empty");
             return LoginStatus.UNAUTHORIZED;
         }
 
-        return this.userDao.getUserByEmail(email)
-                .filter(user -> user.getPasswordHash().equals(password))
-                .map(user -> LoginStatus.SUCCESS)
-                .orElse(LoginStatus.UNAUTHORIZED);
+        Optional<User> userByEmail = this.userDao.getUserByEmail(loginParams.getEmail());
+
+        if (userByEmail.isPresent()) {
+            String passwordSalt = userByEmail.get().getPasswordSalt();
+            String hashedPassword = Util.hashPassword(loginParams.getPassword(), passwordSalt);
+
+            if (hashedPassword.equals(userByEmail.get().getHashedPassword())) {
+                return LoginStatus.SUCCESS;
+            }
+        }
+
+        return LoginStatus.UNAUTHORIZED;
     }
 
 
-    public SignupStatus addUser(User user) {
-        if (!Util.isStringValid(user.getUsername())
-                || !Util.isStringValid(user.getFirstName())
-                || !Util.isStringValid(user.getLastName())
-                || !Util.isStringValid(user.getEmail())
-                || !Util.isStringValid(user.getPasswordHash())) {
+    public SignupStatus addUser(UserParams userParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (!Util.isStringValid(userParams.getUsername())
+                || !Util.isStringValid(userParams.getFirstName())
+                || !Util.isStringValid(userParams.getLastName())
+                || !Util.isStringValid(userParams.getEmail())
+                || !Util.isStringValid(userParams.getPassword())
+                || !Util.isStringValid(userParams.getRole().name())) {
             log.info("One or more fields are invalid");
             return SignupStatus.INVALID;
         }
 
-        if (this.userDao.getUserByEmail(user.getEmail()).isPresent()) {
+        if (this.userDao.getUserByEmail(userParams.getEmail()).isPresent()) {
             log.info("Email already exists");
             return SignupStatus.CONFLICT;
         }
 
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-        user.setRole(Role.valueOf("CUSTOMER"));
+        String salt = Util.generatePasswordSalt();
+        String hashedPassword = Util.hashPassword(userParams.getPassword(), salt);
 
-        int result = this.userDao.addUser(user);
+
+        User newUser = new User(
+                userParams.getEmail(),
+                userParams.getFirstName(),
+                userParams.getLastName(),
+                userParams.getUsername(),
+                salt,
+                hashedPassword,
+                userParams.getRole(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+
+        int result = this.userDao.addUser(newUser);
 
         if (result == 0) {
             log.info("User creation failed");
@@ -78,5 +102,4 @@ public class UserService {
         log.info("User created successfully");
         return SignupStatus.SUCCESS;
     }
-
 }

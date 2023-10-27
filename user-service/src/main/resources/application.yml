@@ -6,3 +6,5 @@ app:
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
       pool-size: 30
+  cors:
+    allowed-origin: http://localhost:4200

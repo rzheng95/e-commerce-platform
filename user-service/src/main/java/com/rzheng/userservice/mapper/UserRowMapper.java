@@ -11,11 +11,12 @@ public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new User(
-                rs.getString("username"),
                 rs.getString("email"),
-                rs.getString("password_hash"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
+                rs.getString("username"),
+                rs.getString("hashed_password"),
+                rs.getString("password_salt"),
                 Role.valueOf(rs.getString("role")),
                 rs.getTimestamp("created_at").toLocalDateTime(),
                 rs.getTimestamp("updated_at").toLocalDateTime()

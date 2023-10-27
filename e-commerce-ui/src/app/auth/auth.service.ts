@@ -16,11 +16,7 @@ export class AuthService {
 
   onLogin(loginParams: LoginParams): Observable<LoginStatus> {
     return this.http
-      .post<string>(`${this.USER_PATH}/login`, null, {
-        params: {
-          email: loginParams.email,
-          password: loginParams.password
-        },
+      .post<string>(`${this.USER_PATH}/login`, loginParams, {
         responseType: 'text' as 'json'
       })
       .pipe(

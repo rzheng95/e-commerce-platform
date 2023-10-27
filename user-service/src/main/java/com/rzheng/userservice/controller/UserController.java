@@ -1,6 +1,8 @@
 package com.rzheng.userservice.controller;
 
+import com.rzheng.userservice.model.LoginParams;
 import com.rzheng.userservice.model.User;
+import com.rzheng.userservice.model.UserParams;
 import com.rzheng.userservice.service.UserService;
 import com.rzheng.userservice.util.LoginStatus;
 import com.rzheng.userservice.util.SignupStatus;
@@ -8,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @RestController
@@ -25,15 +29,9 @@ public class UserController {
         return this.userService.getAllUsers();
     }
 
-
-//    @GetMapping("/check-email")
-//    public boolean doesEmailExist(@RequestParam String email) {
-//        return this.userService.doesEmailExist(email);
-//    }
-
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        LoginStatus loginStatus = this.userService.login(email, password);
+    public ResponseEntity<String> login(@RequestBody LoginParams loginParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        LoginStatus loginStatus = this.userService.login(loginParams);
         if (loginStatus == LoginStatus.SUCCESS) {
             return new ResponseEntity<>("Login successful", HttpStatus.OK);
         }
@@ -41,8 +39,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> addUser(@RequestBody User user) {
-        SignupStatus signupStatus = this.userService.addUser(user);
+    public ResponseEntity<String> addUser(@RequestBody UserParams userParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        SignupStatus signupStatus = this.userService.addUser(userParams);
 
         if (signupStatus == SignupStatus.INVALID) {
             return new ResponseEntity<>("One or more fields are invalid", HttpStatus.UNPROCESSABLE_ENTITY);

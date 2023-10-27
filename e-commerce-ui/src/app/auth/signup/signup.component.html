@@ -2,11 +2,11 @@
   <div class="signup__content">
     <h1 class="signup__title">Signup</h1>
 
-    <form class="signup__form" [formGroup]="signupForm" (ngSubmit)="onSignup()">
+    <form class="signup__form" [formGroup]="signupFormGroup" (ngSubmit)="onSignup()">
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
         <input matInput type="text" formControlName="username" />
-        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('email')?.hasError('required')">
           Username is required.
         </mat-error>
       </mat-form-field>
@@ -14,7 +14,7 @@
       <mat-form-field appearance="outline">
         <mat-label>First Name</mat-label>
         <input matInput type="text" formControlName="firstName" />
-        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('email')?.hasError('required')">
           First Name is required.
         </mat-error>
       </mat-form-field>
@@ -22,7 +22,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Last Name</mat-label>
         <input matInput type="text" formControlName="lastName" />
-        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('email')?.hasError('required')">
           Last Name is required.
         </mat-error>
       </mat-form-field>
@@ -30,10 +30,10 @@
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input matInput type="email" formControlName="email" />
-        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('email')?.hasError('required')">
           Email is required.
         </mat-error>
-        <mat-error *ngIf="signupForm.get('email')?.hasError('email')">
+        <mat-error *ngIf="signupFormGroup.get('email')?.hasError('email')">
           Invalid email.
         </mat-error>
       </mat-form-field>
@@ -47,12 +47,12 @@
         <mat-icon matSuffix (click)="showPassword = !showPassword">
           {{ showPassword ? 'visibility' : 'visibility_off' }}
         </mat-icon>
-        <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('password')?.hasError('required')">
           Password is required
         </mat-error>
       </mat-form-field>
 
-      <!-- <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline">
         <mat-label>Confirmed Password</mat-label>
         <input
           matInput
@@ -61,10 +61,10 @@
         <mat-icon matSuffix (click)="showPassword = !showPassword">
           {{ showPassword ? 'visibility' : 'visibility_off' }}
         </mat-icon>
-        <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
-          Password is required=
+        <mat-error *ngIf="signupFormGroup.get('password')?.hasError('required')">
+          Password is required
         </mat-error>
-      </mat-form-field> -->
+      </mat-form-field>
 
       <button type="submit" mat-flat-button color="primary">Signup</button>
     </form>

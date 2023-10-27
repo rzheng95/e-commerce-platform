@@ -4,18 +4,14 @@ import com.rzheng.userservice.util.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class User {
+public class UserParams {
     private String email;
     private String firstName;
     private String lastName;
     private String username;
-    private String hashedPassword;
-    private String passwordSalt;
+    private String password;
     private Role role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

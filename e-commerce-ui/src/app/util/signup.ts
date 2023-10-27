@@ -1,7 +1,14 @@
 export interface SignupBody {
-  username: string;
+  email: string;
   firstName: string;
   lastName: string;
-  email: string;
-  passwordHash: string;
+  username: string;
+  password: string;
+  role: Role;
+}
+
+export enum Role {
+  CUSTOMER,
+  ADMIN,
+  SELLER
 }

@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsers() {
         String sql = """
-                SELECT username, email, password_hash, first_name, last_name, role, created_at, updated_at
+                SELECT email, first_name, last_name, username, hashed_password, password_salt, role, created_at, updated_at
                 FROM users
                 """;
         return this.jdbcTemplate.query(sql, new UserRowMapper());
@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> getUserByEmail(String email) {
         String sql = """
-                SELECT username, email, password_hash, first_name, last_name, role, created_at, updated_at 
+                SELECT email, first_name, last_name, username, hashed_password, password_salt, role, created_at, updated_at
                 FROM users
                 WHERE email = ?
                 """;
@@ -43,16 +43,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public int addUser(User user) {
         String sql = """
-                INSERT INTO users(username, email, password_hash, first_name, last_name, role, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO users(email, first_name, last_name, username, hashed_password, password_salt, role, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         return this.jdbcTemplate.update(
                 sql,
-                user.getUsername(),
                 user.getEmail(),
-                user.getPasswordHash(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getUsername(),
+                user.getHashedPassword(),
+                user.getPasswordSalt(),
                 user.getRole().name(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

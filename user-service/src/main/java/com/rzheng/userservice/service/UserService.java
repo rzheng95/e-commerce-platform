@@ -37,6 +37,7 @@ public class UserService {
         }
         return this.userDao.getUserByEmail(email).isPresent();
     }
+// generate JWT token when user logs in successfully and return it to the client as a response header
 
     public LoginStatus login(LoginParams loginParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (!Util.isStringValid(loginParams.getEmail()) || !Util.isStringValid(loginParams.getPassword())) {
@@ -103,3 +104,4 @@ public class UserService {
         return SignupStatus.SUCCESS;
     }
 }
+

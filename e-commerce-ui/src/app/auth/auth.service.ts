@@ -1,10 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpResponse,
+  HttpResponseBase
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginParams } from '../util/login';
 import { LoginStatus } from '../util/login-status';
 import { SignupBody } from '../util/signup';
+
+export interface MyHttpResponse extends HttpResponseBase {
+  body: string | null;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +24,15 @@ export class AuthService {
 
   onLogin(loginParams: LoginParams): Observable<LoginStatus> {
     return this.http
-      .post<string>(`${this.USER_PATH}/login`, loginParams, {
-        responseType: 'text' as 'json'
+      .post(`${this.USER_PATH}/login`, loginParams, {
+        observe: 'response',
+        responseType: 'text'
       })
       .pipe(
-        map(res => {
-          if (res.toLowerCase().includes('successful')) {
+        map((res: HttpResponse<string>) => {
+          const token = res.headers.get('Authorization');
+          if (token && res.body?.toLowerCase().includes('successful')) {
+            localStorage.setItem('jwtToken', token.replace('Bearer ', ''));
             return LoginStatus.SUCCESS;
           }
           return LoginStatus.UNAUTHORIZED;
@@ -31,6 +42,12 @@ export class AuthService {
 
   onSignup(signupBody: SignupBody): Observable<string> {
     return this.http.post<string>(`${this.USER_PATH}/signup`, signupBody, {
+      responseType: 'text' as 'json'
+    });
+  }
+
+  test(): Observable<string> {
+    return this.http.get<string>(`${environment.backendUrl}/api/v1/test`, {
       responseType: 'text' as 'json'
     });
   }

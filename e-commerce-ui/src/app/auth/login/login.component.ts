@@ -52,4 +52,8 @@ export class LoginComponent {
       }
     });
   }
+
+  test(): void {
+    this.auth.test().subscribe(res => console.log(res));
+  }
 }

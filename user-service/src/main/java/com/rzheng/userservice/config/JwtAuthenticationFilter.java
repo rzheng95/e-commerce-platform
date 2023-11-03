@@ -39,17 +39,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
+            tokenProvider.validateToken(jwt);
+            String email = tokenProvider.getEmailFromJwt(jwt);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                String email = tokenProvider.getEmailFromJwt(jwt);
-
-                userService.getUserByEmail(email).ifPresent(user -> {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            user, null, null);
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    getContext().setAuthentication(authentication);
-                });
-            }
+            userService.getUserByEmail(email).ifPresent(user -> {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        user, null, null);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                getContext().setAuthentication(authentication);
+            });
         } catch (ExpiredJwtException ex) {
             logger.error("Expired JWT token");
         } catch (UnsupportedJwtException ex) {

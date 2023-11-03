@@ -6,6 +6,7 @@ import com.rzheng.userservice.model.UserParams;
 import com.rzheng.userservice.service.UserService;
 import com.rzheng.userservice.util.LoginStatus;
 import com.rzheng.userservice.util.SignupStatus;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
+/**
+ * @author Richard
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -30,9 +33,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginParams loginParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity<String> login(@RequestBody LoginParams loginParams, HttpServletResponse response) throws NoSuchAlgorithmException, InvalidKeySpecException {
         LoginStatus loginStatus = this.userService.login(loginParams);
         if (loginStatus == LoginStatus.SUCCESS) {
+            response.addHeader("Authorization", this.userService.getJwtToken(loginParams.getEmail()));
             return new ResponseEntity<>("Login successful", HttpStatus.OK);
         }
         return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);

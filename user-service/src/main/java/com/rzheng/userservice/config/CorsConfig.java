@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-
     @Value("${app.cors.allowed-origin}")
     private String allowedOrigins;
 
@@ -21,6 +20,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name(), HttpMethod.OPTIONS.name())
                 .allowedHeaders(CorsConfiguration.ALL)
                 .allowCredentials(true)
+                .exposedHeaders(JwtAuthenticationFilter.AUTHORIZATION_HEADER)
                 .maxAge(1800L);
     }
 }

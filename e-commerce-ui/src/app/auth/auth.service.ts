@@ -20,6 +20,8 @@ export interface MyHttpResponse extends HttpResponseBase {
 export class AuthService {
   private readonly USER_PATH = `${environment.backendUrl}/api/v1/users`;
   public static readonly BEARER_PREFIX = 'Bearer ';
+  public static readonly JWT_LOCAL_STORAGE = 'jwt';
+  public static readonly AUTHORIZATION_HEADER = 'Authorization';
 
   constructor(private http: HttpClient) {}
 
@@ -31,10 +33,10 @@ export class AuthService {
       })
       .pipe(
         map((res: HttpResponse<string>) => {
-          const token = res.headers.get('Authorization');
+          const token = res.headers.get(AuthService.AUTHORIZATION_HEADER);
           if (token && res.body?.toLowerCase().includes('successful')) {
             localStorage.setItem(
-              'jwtToken',
+              AuthService.JWT_LOCAL_STORAGE,
               token.replace(AuthService.BEARER_PREFIX, '')
             );
             return LoginStatus.SUCCESS;

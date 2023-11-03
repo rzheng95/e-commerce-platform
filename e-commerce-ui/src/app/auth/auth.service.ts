@@ -4,7 +4,7 @@ import {
   HttpResponseBase
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginParams } from '../util/login';
 import { LoginStatus } from '../util/login-status';
@@ -19,6 +19,7 @@ export interface MyHttpResponse extends HttpResponseBase {
 })
 export class AuthService {
   private readonly USER_PATH = `${environment.backendUrl}/api/v1/users`;
+  public static readonly BEARER_PREFIX = 'Bearer ';
 
   constructor(private http: HttpClient) {}
 
@@ -32,7 +33,10 @@ export class AuthService {
         map((res: HttpResponse<string>) => {
           const token = res.headers.get('Authorization');
           if (token && res.body?.toLowerCase().includes('successful')) {
-            localStorage.setItem('jwtToken', token.replace('Bearer ', ''));
+            localStorage.setItem(
+              'jwtToken',
+              token.replace(AuthService.BEARER_PREFIX, '')
+            );
             return LoginStatus.SUCCESS;
           }
           return LoginStatus.UNAUTHORIZED;

@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Richard
+ */
 @Service
 @Slf4j
 public class UserService {
@@ -25,9 +28,12 @@ public class UserService {
         this.userDao = userDao;
     }
 
-
     public List<User> getAllUsers() {
         return this.userDao.getUsers();
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return this.userDao.getUserByEmail(email);
     }
 
     public boolean doesEmailExist(String email) {

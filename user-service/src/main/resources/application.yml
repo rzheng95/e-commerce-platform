@@ -8,3 +8,6 @@ app:
       pool-size: 30
   cors:
     allowed-origin: http://localhost:4200
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-in-ms: 60000

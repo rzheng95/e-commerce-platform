@@ -1,5 +1,6 @@
 package com.rzheng.userservice.service;
 
+import com.rzheng.userservice.config.JwtTokenProvider;
 import com.rzheng.userservice.dao.UserDao;
 import com.rzheng.userservice.model.LoginParams;
 import com.rzheng.userservice.model.User;
@@ -8,6 +9,7 @@ import com.rzheng.userservice.util.LoginStatus;
 import com.rzheng.userservice.util.SignupStatus;
 import com.rzheng.userservice.util.Util;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,18 +18,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Richard
+ */
 @Service
 @Slf4j
 public class UserService {
+
     private final UserDao userDao;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, @Lazy JwtTokenProvider jwtTokenProvider) {
         this.userDao = userDao;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
-
 
     public List<User> getAllUsers() {
         return this.userDao.getUsers();
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return this.userDao.getUserByEmail(email);
     }
 
     public boolean doesEmailExist(String email) {
@@ -37,6 +48,7 @@ public class UserService {
         }
         return this.userDao.getUserByEmail(email).isPresent();
     }
+// generate JWT token when user logs in successfully and return it to the client as a response header
 
     public LoginStatus login(LoginParams loginParams) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (!Util.isStringValid(loginParams.getEmail()) || !Util.isStringValid(loginParams.getPassword())) {
@@ -102,4 +114,9 @@ public class UserService {
         log.info("User created successfully");
         return SignupStatus.SUCCESS;
     }
+
+    public String getJwtToken(String email) {
+        return "Bearer " + this.jwtTokenProvider.generateToken(email);
+    }
 }
+

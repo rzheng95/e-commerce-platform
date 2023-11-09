@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { LoginParams } from 'src/app/util/login';
-// import { LoginStatus } from 'src/app/util/login-status';
+
+import { SharedService } from 'src/app/shared/shared.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -12,35 +12,31 @@ import { AuthService } from '../auth.service';
 export class PasswordResetComponent {
   pwResetFormGroup: FormGroup;
   showPassword = false;
-  // arePasswordsMatching = false;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private SharedService: SharedService
   ) {
     this.pwResetFormGroup = this.fb.group({
       password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required, this.passwordValidator]]
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          this.SharedService.matchValidator(
+            'password',
+            'confirmPassword',
+            'Passwords do not match'
+          )
+        ]
+      ]
     });
   }
 
-  passwordValidator(confirmPassword: string): any {
-    const password = this.pwResetFormGroup.get('password')?.value;
-    // const confirmPassword = this.pwResetFormGroup.get('confirmPassword')?.value;
-    password === confirmPassword
-      ? { passwordsMatched: true }
-      : { passwordsMatched: false };
-  }
-
   onPwReset(): void {
-    // const [password, confirmPassword] = this.pwResetFormGroup.value;
-    const password = this.pwResetFormGroup.get('password')?.value;
-    const confirmPassword = this.pwResetFormGroup.get('confirmPassword')?.value;
-
-    console.log(this.pwResetFormGroup.value, password === confirmPassword);
-
-    // this.pwResetFormGroup.valid && password === confirmPassword
-    //   ? (this.arePasswordsMatching = true)
-    //   : (this.arePasswordsMatching = false);
+    if (this.pwResetFormGroup.valid) {
+      // make a http call to reset password endpoint
+    }
   }
 }

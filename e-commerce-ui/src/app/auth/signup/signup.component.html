@@ -61,9 +61,13 @@
         <mat-icon matSuffix (click)="showPassword = !showPassword">
           {{ showPassword ? 'visibility' : 'visibility_off' }}
         </mat-icon>
-        <mat-error *ngIf="signupFormGroup.get('password')?.hasError('required')">
+        <mat-error *ngIf="signupFormGroup.get('confirmPassword')?.hasError('required')">
           Password is required
         </mat-error>
+        <mat-error *ngIf="signupFormGroup.get('confirmPassword')?.hasError('isMatch')">
+          Password do not match
+        </mat-error>
+
       </mat-form-field>
 
       <button type="submit" mat-flat-button color="primary">Signup</button>

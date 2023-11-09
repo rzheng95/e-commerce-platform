@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SharedService } from 'src/app/shared/shared.service';
 import { Role, SignupBody } from 'src/app/util/signup';
 import { AuthService } from '../auth.service';
 
@@ -14,7 +15,8 @@ export class SignupComponent {
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private sharedService: SharedService
   ) {
     this.signupFormGroup = this.fb.group({
       username: ['', [Validators.required]],
@@ -22,7 +24,17 @@ export class SignupComponent {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          this.sharedService.matchValidator(
+            'password',
+            'confirmPassword',
+            'Passwords do not match'
+          )
+        ]
+      ]
     });
   }
 

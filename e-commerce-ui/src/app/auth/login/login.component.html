@@ -20,19 +20,20 @@
         <input
           matInput
           [type]="showPassword ? 'password' : 'text'"
-          formControlName="password"
-        />
+          formControlName="password" />
         <mat-icon matSuffix (click)="showPassword = !showPassword">
-          {{ showPassword ? "visibility" : "visibility_off" }}
+          {{ showPassword ? 'visibility' : 'visibility_off' }}
         </mat-icon>
         <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
           Password is required
         </mat-error>
       </mat-form-field>
 
-      <button type="submit" mat-flat-button color="primary">
-        Login
-      </button>
+      <mat-error *ngIf="loginFailed">
+        Invalid email or password. Please try again.
+      </mat-error>
+
+      <button type="submit" mat-flat-button color="primary">Login</button>
     </form>
 
     <p class="login__alternative">

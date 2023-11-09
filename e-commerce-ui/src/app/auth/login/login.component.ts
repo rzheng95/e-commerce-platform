@@ -1,9 +1,9 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
 import { LoginParams } from 'src/app/util/login';
 import { LoginStatus } from 'src/app/util/login-status';
-import { HttpStatusCode } from '@angular/common/http';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +13,7 @@ import { HttpStatusCode } from '@angular/common/http';
 export class LoginComponent {
   loginForm: FormGroup;
   showPassword = false;
+  loginFailed = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,13 +42,18 @@ export class LoginComponent {
       next: (loginStatus: LoginStatus) => {
         if (loginStatus === LoginStatus.SUCCESS) {
           console.log('Login successful');
+          this.loginFailed = false;
         } else if (loginStatus === LoginStatus.UNAUTHORIZED) {
-          console.log('Login failed');
+          console.log('Login failed: unauthorized');
+          this.loginForm.reset({ email: '', password: '' });
+          this.loginFailed = true;
         }
       },
       error: err => {
         if (err.status === HttpStatusCode.Unauthorized) {
-          console.log('Login failed');
+          console.log('Login failed: in error');
+          this.loginForm.reset({ email: '', password: '' });
+          this.loginFailed = true;
         }
       }
     });

@@ -12,6 +12,7 @@ import { AuthService } from '../auth.service';
 export class SignupComponent {
   signupFormGroup: FormGroup;
   showPassword = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -23,7 +24,7 @@ export class SignupComponent {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]], // TODO: fix password mismatch bug
       confirmPassword: [
         '',
         [
@@ -39,7 +40,13 @@ export class SignupComponent {
   }
 
   onSignup(): void {
-    if (!this.signupFormGroup.valid) return;
+    if (this.signupFormGroup.invalid) {
+      this.errorMessage = this.sharedService.getFormErrors(
+        this.signupFormGroup
+      );
+      return;
+    }
+    this.errorMessage = '';
 
     const { username, firstName, lastName, email, password } =
       this.signupFormGroup.value;
@@ -58,7 +65,10 @@ export class SignupComponent {
         console.log('Signup successful: ', res);
       },
       error: err => {
-        console.log('Signup failed:', err.error);
+        console.log('error');
+        console.log(err.error);
+
+        this.errorMessage = err.error;
       }
     });
   }

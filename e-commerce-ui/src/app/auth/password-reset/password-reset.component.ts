@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./password-reset.component.scss']
 })
 export class PasswordResetComponent {
-  pwResetFormGroup: FormGroup;
+  passwordResetFormGroup: FormGroup;
   showPassword = false;
 
   constructor(
@@ -18,7 +18,7 @@ export class PasswordResetComponent {
     private auth: AuthService,
     private SharedService: SharedService
   ) {
-    this.pwResetFormGroup = this.fb.group({
+    this.passwordResetFormGroup = this.fb.group({
       password: ['', [Validators.required]],
       confirmPassword: [
         '',
@@ -34,8 +34,8 @@ export class PasswordResetComponent {
     });
   }
 
-  onPwReset(): void {
-    if (this.pwResetFormGroup.valid) {
+  onPasswordReset(): void {
+    if (this.passwordResetFormGroup.valid) {
       // make a http call to reset password endpoint
     }
   }

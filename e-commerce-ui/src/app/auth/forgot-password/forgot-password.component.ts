@@ -20,7 +20,7 @@ export class ForgotPasswordComponent {
     });
   }
 
-  OnSendResetEmail(): void {
+  onSendResetEmail(): void {
     if (this.forgotFormGroup.valid) {
       this.showSuccessMessage = true;
     }

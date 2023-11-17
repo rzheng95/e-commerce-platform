@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginParams } from 'src/app/util/login';
 import { LoginStatus } from 'src/app/util/login-status';
 import { AuthService } from '../auth.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-login',
@@ -11,55 +12,53 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  loginForm: FormGroup;
+  loginFormGroup: FormGroup;
   showPassword = false;
-  loginFailed = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private authService: AuthService,
+    private sharedService: SharedService
   ) {
-    this.loginForm = this.fb.group({
+    this.loginFormGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
 
   onLogin(): void {
-    if (!this.loginForm.valid) {
+    if (this.loginFormGroup.invalid) {
+      this.errorMessage = this.sharedService.getFormErrors(this.loginFormGroup);
       return;
     }
+    this.errorMessage = '';
 
-    const email = this.loginForm.get('email')?.value;
-    const password = this.loginForm.get('password')?.value;
+    const email = this.loginFormGroup.get('email')?.value;
+    const password = this.loginFormGroup.get('password')?.value;
 
     const loginParams: LoginParams = {
       email,
       password
     };
 
-    this.auth.onLogin(loginParams).subscribe({
+    this.authService.onLogin(loginParams).subscribe({
       next: (loginStatus: LoginStatus) => {
         if (loginStatus === LoginStatus.SUCCESS) {
           console.log('Login successful');
-          this.loginFailed = false;
         } else if (loginStatus === LoginStatus.UNAUTHORIZED) {
           console.log('Login failed: unauthorized');
-          this.loginForm.reset({ email: '', password: '' });
-          this.loginFailed = true;
+          this.loginFormGroup.reset({ email: '', password: '' });
+          this.errorMessage = 'Invalid email or password';
         }
       },
       error: err => {
         if (err.status === HttpStatusCode.Unauthorized) {
           console.log('Login failed: in error');
-          this.loginForm.reset({ email: '', password: '' });
-          this.loginFailed = true;
+          this.loginFormGroup.reset({ email: '', password: '' });
+          this.errorMessage = 'Invalid email or password';
         }
       }
     });
-  }
-
-  test(): void {
-    this.auth.test().subscribe(res => console.log(res));
   }
 }

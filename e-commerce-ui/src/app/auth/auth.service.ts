@@ -51,10 +51,4 @@ export class AuthService {
       responseType: 'text' as 'json'
     });
   }
-
-  test(): Observable<string> {
-    return this.http.get<string>(`${environment.backendUrl}/api/v1/test`, {
-      responseType: 'text' as 'json'
-    });
-  }
 }

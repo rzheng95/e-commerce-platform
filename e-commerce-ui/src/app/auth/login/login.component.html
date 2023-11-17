@@ -1,52 +1,33 @@
-<section class="login login-container">
-  <div class="login__content">
-    <h1 class="login__title">Login</h1>
-    <h2 class="login__intro-message">Welcome!</h2>
-
-    <form class="login__form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" />
-        <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
-          >Email is required.
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
-          >Invalid email.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          [type]="showPassword ? 'password' : 'text'"
-          formControlName="password" />
-        <mat-icon matSuffix (click)="showPassword = !showPassword">
-          {{ showPassword ? 'visibility' : 'visibility_off' }}
-        </mat-icon>
-        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-          Password is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-error *ngIf="loginFailed">
-        Invalid email or password. Please try again.
-      </mat-error>
-
-      <button type="submit" mat-flat-button color="primary">Login</button>
-    </form>
-
-    <a class="login__password-reset" [routerLink]="['/forgot-password']">
-      Forgot Password?
-    </a>
-
-    <p class="login__alternative">
-      Don't have an account?
-      <a class="login__alternative__signup" [routerLink]="['/signup']">
-        Signup
-      </a>
-    </p>
-  </div>
-  <button mat-raised-button (click)="test()">Test</button>
-</section>
-<router-outlet></router-outlet>
+<div class="auth-containers">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-subtitle>Welcome!</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form [formGroup]="loginFormGroup" (ngSubmit)="onLogin()">
+        <!-- Email -->
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+        </mat-form-field>
+    
+        <!-- Password -->
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput [type]="showPassword ? 'password' : 'text'" formControlName="password" />
+          <mat-icon matSuffix (click)="showPassword = !showPassword">{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </mat-form-field>
+        
+        <mat-error>{{ errorMessage }}</mat-error>
+        <button mat-raised-button type="submit" color="primary">Login</button>
+      </form>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <p><a [routerLink]="['/forgot-password']">Forgot Password?</a></p>
+      <p>Don't have an account?<a [routerLink]="['/signup']">Signup</a></p>
+    </mat-card-actions>
+  </mat-card>
+</div>

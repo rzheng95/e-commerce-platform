@@ -12,6 +12,7 @@ import { AuthService } from '../auth.service';
 export class PasswordResetComponent {
   passwordResetFormGroup: FormGroup;
   showPassword = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -38,5 +39,14 @@ export class PasswordResetComponent {
     if (this.passwordResetFormGroup.valid) {
       // make a http call to reset password endpoint
     }
+
+    if (this.passwordResetFormGroup.invalid) {
+      this.errorMessage = this.SharedService.getFormErrors(
+        this.passwordResetFormGroup
+      );
+      return;
+    }
+
+    this.errorMessage = '';
   }
 }

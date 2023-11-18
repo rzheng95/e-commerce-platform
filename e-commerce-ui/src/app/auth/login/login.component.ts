@@ -1,10 +1,10 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SharedService } from 'src/app/shared/shared.service';
 import { LoginParams } from 'src/app/util/login';
 import { LoginStatus } from 'src/app/util/login-status';
 import { AuthService } from '../auth.service';
-import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-login',

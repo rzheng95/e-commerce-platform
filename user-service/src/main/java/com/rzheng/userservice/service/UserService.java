@@ -12,10 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
@@ -31,10 +27,12 @@ public class UserService {
 
     private final UserDao userDao;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailService emailService;
 
-    public UserService(UserDao userDao, @Lazy JwtTokenProvider jwtTokenProvider) {
+    public UserService(UserDao userDao, @Lazy JwtTokenProvider jwtTokenProvider, EmailService emailService) {
         this.userDao = userDao;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.emailService = emailService;
     }
 
     public List<User> getAllUsers() {
@@ -123,36 +121,17 @@ public class UserService {
         return "Bearer " + this.jwtTokenProvider.generateToken(email);
     }
 
+    public void sendResetPasswordEmail(String email) {
+        String resetPasswordLink = "http://localhost:4200/password-reset?token=" + Util.generateEmailToken();
+        this.emailService.sendEmail(email, "Reset password", "Please click on the link to reset your password " + resetPasswordLink);
+    }
 
-//    public static void sendEmail(String to, String subject, String body) throws MessagingException {
-//
-//
-//        // Set up mail server properties
-//        Properties properties = new Properties();
-//        properties.put("mail.smtp.host", "smtp.gmail.com");
-//        properties.put("mail.smtp.port", "587");
-//        properties.put("mail.smtp.auth", "true");
-//        properties.put("mail.smtp.starttls.enable", "true");
-//
-//        // Create a session with authentication
-//        Session session = Session.getInstance(properties, new Authenticator() {
-//            @Override
-//            protected PasswordAuthentication getPasswordAuthentication() {
-//                return new PasswordAuthentication("ecommercemailsender@gmail.com", "uqpdufrigkrarznu");
-//            }
-//        });
-//
-//        // Create a message
-//        Message message = new MimeMessage(session);
-//        message.setFrom(new InternetAddress("ecommercemailsender@gmail.com"));
-//        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-//        message.setSubject(subject);
-//        message.setText(body);
-//
-//        // Send the message
-//        Transport.send(message);
-//
-//        System.out.println("Message sent successfully");
-//    }
+    public boolean isResetPasswordTokenValid(String email, String token) {
+        return false;
+    }
+
+    public void resetPassword(String email, String newPassword) {
+
+    }
 }
 

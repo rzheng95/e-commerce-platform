@@ -59,6 +59,30 @@ public class UserController {
         }
 
         return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
-
     }
+
+    @GetMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+//        if (!this.userService.doesEmailExist(email)) {
+//            return new ResponseEntity<>("Email does not exist", HttpStatus.NOT_FOUND);
+//        }
+
+        this.userService.sendResetPasswordEmail(email);
+        return new ResponseEntity<>("Email sent", HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (!this.userService.doesEmailExist(email)) {
+            return new ResponseEntity<>("Email does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if (!this.userService.isResetPasswordTokenValid(email, token)) {
+            return new ResponseEntity<>("Token is invalid", HttpStatus.UNAUTHORIZED);
+        }
+
+        this.userService.resetPassword(email, newPassword);
+        return new ResponseEntity<>("Password reset successfully", HttpStatus.OK);
+    }
+
 }

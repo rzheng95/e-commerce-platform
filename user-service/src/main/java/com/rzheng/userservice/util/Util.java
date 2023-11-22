@@ -37,9 +37,7 @@ public class Util {
         return Base64.getEncoder().encodeToString(salt);
     }
 
-    public static String generateToken() {
+    public static String generateEmailToken() {
         return UUID.randomUUID().toString();
     }
-
-
 }

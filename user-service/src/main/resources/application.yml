@@ -11,3 +11,14 @@ app:
   jwt:
     secret-key: ${JWT_SECRET_KEY}
     expiration-in-ms: 60000
+  email:
+    username: ecommercemailsender@gmail.com
+    password: uqpdufrigkrarznu
+#    username: ${EMAIL_USERNAME}
+#    password: ${EMAIL_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    auth: true
+    starttls: true
+#    from: ${EMAIL_USERNAME}
+    from: ecommercemailsender@gmail.com

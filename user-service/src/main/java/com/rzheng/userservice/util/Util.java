@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+import java.util.UUID;
 
 public class Util {
 
@@ -35,4 +36,10 @@ public class Util {
         // Convert byte array to base64 string for easier storage
         return Base64.getEncoder().encodeToString(salt);
     }
+
+    public static String generateToken() {
+        return UUID.randomUUID().toString();
+    }
+
+
 }
